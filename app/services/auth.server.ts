@@ -3,9 +3,11 @@ import { MicrosoftStrategy } from "remix-auth-microsoft";
 import { Authenticator } from "remix-auth";
 import { sessionStorage } from "~/services/session.server";
 
-export let authenticator = new Authenticator<User>(sessionStorage); //User is a custom user types you can define as you want
+interface User{}
 
-let microsoftStrategy = new MicrosoftStrategy(
+export const authenticator = new Authenticator<User>(sessionStorage); //User is a custom user types you can define as you want
+
+const microsoftStrategy = new MicrosoftStrategy(
     {
         clientId: "",
         clientSecret: "",
@@ -31,8 +33,8 @@ let microsoftStrategy = new MicrosoftStrategy(
         // If you use the email address to identify users and allow signing in from any tenant (`tenantId` is not set)
         // it opens up a possibility of spoofing users!
 
-
-        return User.findOrCreate({ id: profile.id });
+        console.log(accessToken,extraParams, profile)
+        return {profile}
     }
 );
 
