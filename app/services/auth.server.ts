@@ -1,21 +1,18 @@
 // app/services/auth.server.ts
 import { MicrosoftStrategy } from "remix-auth-microsoft";
 import { Authenticator } from "remix-auth";
-import { sessionServer } from "~/services/session.server"
-// import {a} from "vite-node/dist/index-O2IrwHKf";
+import { sessionStorage } from "~/services/session.server";
 
-interface User{
-
-}
-
-export let authenticator = new Authenticator<User>(sessionServer); //User is a custom user types you can define as you want
+export let authenticator = new Authenticator<User>(sessionStorage); //User is a custom user types you can define as you want
 
 let microsoftStrategy = new MicrosoftStrategy(
     {
         clientId: "",
         clientSecret: "",
-        redirectUri: "http://localhost:5173/auth/microsoft/callback",
-        tenantId: "", // optional - necessary for organization without multitenant (see below)
+        redirectUri: "",
+        tenantId: "",
+        scope: "openid profile email", // optional
+        prompt: "login", // optional
     },
     async ({ accessToken, extraParams, profile }) => {
         // Here you can fetch the user from database or return a user object based on profile
@@ -34,7 +31,7 @@ let microsoftStrategy = new MicrosoftStrategy(
         // If you use the email address to identify users and allow signing in from any tenant (`tenantId` is not set)
         // it opens up a possibility of spoofing users!
 
-        console.log(profile,accessToken,extraParams)
+
         return User.findOrCreate({ id: profile.id });
     }
 );

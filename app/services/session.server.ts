@@ -1,7 +1,7 @@
 // app/services/session.server.ts
 import { createCookieSessionStorage } from "@remix-run/node";
 
-export let sessionServer = createCookieSessionStorage({
+export let sessionStorage = createCookieSessionStorage({
     cookie: {
         name: "_session", // use any name you want here
         sameSite: "lax", // this helps with CSRF
@@ -12,4 +12,4 @@ export let sessionServer = createCookieSessionStorage({
     },
 });
 
-export let { getSession, commitSession, destroySession } = sessionServer;
+export let { getSession, commitSession, destroySession } = sessionStorage;
